@@ -1,0 +1,12 @@
+{
+  "name": "money-wasted",
+  "displayName": "money-wasted",
+  "expo": {
+    "name": "money-wasted",
+    "slug": "money-wasted",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
