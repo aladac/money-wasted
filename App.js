@@ -1,21 +1,51 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useRef } from 'react';
 
-export default function App() {
+const App = () => {
+  const [moneyWastedSoFar, setMoney] = useState(0)
+  const [isWasting, setIsWasting] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+  const increment = useRef(null)
+
+  const usdPerHour = 25
+
+  const handleStart = () => {
+    setIsWasting(true)
+    setIsPaused(true)
+    increment.current = setInterval(() => {
+      setMoney((moneyWastedSoFar) => moneyWastedSoFar + usdPerHour / 60)
+    }, 1000)
+  }
+
+  const handlePause = () => {
+    clearInterval(increment.current)
+    setIsPaused(false)
+  }
+
+  const formatCurrency = () => {
+    return `$ ${moneyWastedSoFar.toFixed(2)}`
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <div className="app">
+      <div className='money-wasted'>
+        <p>
+          As a develper, earning {usdPerHour} bucks per hour
+          I want to know how much my meetings cost my employer:
+        </p>
+        <p>{formatCurrency()}</p>
+        <div className='buttons'>
+          {
+            !isWasting && !isPaused ?
+              <button onClick={handleStart}>Start</button>
+              : (
+                isPaused ? <button onClick={handlePause}>Pause</button> :
+                  <button onClick={handleStart}>Resume</button>
+              )
+          }
+        </div>
+      </div>
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
